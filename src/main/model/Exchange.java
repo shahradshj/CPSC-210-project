@@ -25,6 +25,7 @@ public class Exchange {
         }
         return !exist;
     }
+
     public Stock makeStock(String name, String symbol, int quantity, double buyPrice, double divYield) {
         Stock stock = new Stock(name, symbol, quantity, buyPrice, divYield);
         return stock;
