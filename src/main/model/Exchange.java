@@ -11,6 +11,21 @@ public class Exchange {
 
     private LinkedList<Stock> stocks;
 
+    public Exchange(String name, String mic, String country) {
+        this.name = name;
+        this.mic = mic;
+        this.country = country;
+    }
+
+    public Stock searchForName(String name) {
+        for (Stock s : this.stocks) {
+            if (name.equals(s.getName())) {
+                return s;
+            }
+        }
+        return null;
+    }
+
     public String getCountry() {
         return country;
     }
