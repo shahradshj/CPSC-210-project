@@ -50,7 +50,7 @@ public class Stock {
         this.sellPrice = sellPrice;
         this.marketPrice = sellPrice;
         this.quantity -= quantity;
-        return quantity * (this.buyPrice - sellPrice);
+        return quantity * (sellPrice - this.buyPrice);
     }
 
 //    // Requires: one positive integer and one positive double
@@ -89,9 +89,9 @@ public class Stock {
 //        return divYield;
 //    }
 //
-//    public double getMarketPrice() {
-//        return marketPrice;
-//    }
+    public double getMarketPrice() {
+        return marketPrice;
+    }
 //
 //    public double getSellPrice() {
 //        return sellPrice;

@@ -25,6 +25,41 @@ public class TestExchange {
     }
 
     @Test
+    void testAddStockThatDoesNotExist() {
+        assertTrue(nyse.addStock(amzn));
+        assertEquals(amzn, nyse.searchForName("Amazon"));
+    }
+
+    @Test
+    void testAddStockThatDoesExist() {
+        nyse.addStock(amzn);
+        assertFalse(nyse.addStock(amzn));
+    }
+
+    @Test
+    void testSearchForName() {
+        nasdaq.addStock(aapl);
+        nasdaq.addStock(msft);
+        nasdaq.addStock(googl);
+        nyse.addStock(dis);
+        nyse.addStock(amzn);
+
+        assertEquals(googl, nasdaq.searchForName("Alphabet"));
+        assertEquals(dis, nyse.searchForName("Walt Disney Co"));
+    }
+
+    @Test
+    void testSearchForNameForNull() {
+        nasdaq.addStock(aapl);
+        nasdaq.addStock(msft);
+        nasdaq.addStock(googl);
+        nyse.addStock(dis);
+        nyse.addStock(amzn);
+
+        assertEquals(null, nasdaq.searchForName("google"));
+    }
+
+    @Test
     void testListOfStocks() {
         nasdaq.addStock(aapl);
         nasdaq.addStock(msft);
@@ -35,28 +70,35 @@ public class TestExchange {
                 "\tWalt Disney Co(DIS)\n" +
                 "\t - Total cost: $US190.0 * 2 = $US380.0\n" +
                 "\t - Market Price: $US190.0\n" +
+                "\t - Today's value: $US380.0\n" +
                 "\t - Profit:  $US 0.0 - 0.0%\n" +
                 "\n" +
                 "\tAmazon(AMZN)\n" +
                 "\t - Total cost: $US3000.0 * 2 = $US6000.0\n" +
                 "\t - Market Price: $US3000.0\n" +
-                "\t - Profit:  $US 0.0 - 0.0%\n\n";
+                "\t - Today's value: $US6000.0\n" +
+                "\t - Profit:  $US 0.0 - 0.0%\n" +
+                "\n";
 
         String nas = "Nasdaq Composite (NASDAQ):\n" +
                 "\tApple(AAPL)\n" +
                 "\t - Total cost: $US120.0 * 5 = $US600.0\n" +
                 "\t - Market Price: $US120.0\n" +
+                "\t - Today's value: $US600.0\n" +
                 "\t - Profit:  $US 0.0 - 0.0%\n" +
                 "\n" +
                 "\tMicrosoft(MSFT)\n" +
                 "\t - Total cost: $US220.0 * 10 = $US2200.0\n" +
                 "\t - Market Price: $US220.0\n" +
+                "\t - Today's value: $US2200.0\n" +
                 "\t - Profit:  $US 0.0 - 0.0%\n" +
                 "\n" +
                 "\tAlphabet(GOOGL)\n" +
                 "\t - Total cost: $US2000.0 * 1 = $US2000.0\n" +
                 "\t - Market Price: $US2000.0\n" +
-                "\t - Profit:  $US 0.0 - 0.0%\n\n";
+                "\t - Today's value: $US2000.0\n" +
+                "\t - Profit:  $US 0.0 - 0.0%\n" +
+                "\n";
         assertEquals(nas, nasdaq.listOfStocks());
         assertEquals(ny, nyse.listOfStocks());
     }

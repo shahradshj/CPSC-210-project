@@ -81,7 +81,7 @@ public class PortfolioTrackerApp {
             System.out.println("You do not have any stocks!");
         } else {
             for (Exchange s : exchanges) {
-                summery += s.listOfStocks() + "\n";
+                summery += s.listOfStocks() + "";
             }
             System.out.print(summery);
         }
