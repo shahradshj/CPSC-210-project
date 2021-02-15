@@ -6,15 +6,15 @@ public class Stock {
     // Buy, sell, and market price are in $US.
     private String name;
     private String symbol;
-    private int buyPrice;
-    private int sellPrice;
-    private int marketPrice;
+    private double buyPrice;
+    private double sellPrice;
+    private double marketPrice;
 
-    private int divYield; //dividend is in percentage;
+    private double divYield; //dividend is in percentage;
     private int quantity;
 
 
-    public Stock(String name, String symbol, int quantity, int buyPrice, int divYield) {
+    public Stock(String name, String symbol, int quantity, double buyPrice, double divYield) {
         this.name = name;
         this.symbol = symbol;
         this.quantity = quantity;
@@ -33,57 +33,67 @@ public class Stock {
         return title + cost + currentPrice + profit;
     }
 
-    // Requires: positive integer
+    // Requires: positive double
     // MODIFIES: this
     // EFFECTS: record the new market price and return profit in $US up to this point
-    public int updateMarketPrice(int marketPrice) {
+    public double updateMarketPrice(double marketPrice) {
         this.marketPrice = marketPrice;
         return calcProfit();
     }
 
-    // Requires: two positive integers, quantity is less that or equal number of owned stocks
+    // Requires: one positive integer and one positive double, quantity is less that or equal number of owned stocks
     // MODIFIES: this
     // EFFECTS: sell number of given stock and return profit made on the sold stocks in $US
-    public int sell(int quantity,int sellPrice) {
+    public double sell(int quantity, double sellPrice) {
         this.sellPrice = sellPrice;
         this.marketPrice = sellPrice;
         this.quantity -= quantity;
         return quantity * (this.buyPrice - sellPrice);
     }
 
+    // Requires: one positive integer and one positive double
+    // MODIFIES: this
+    // EFFECTS: add to the number of owned quantity and calculate new average for buy price, return new buy price
+    public double buyMore(int quantity, double buyPrice) {
+        this.buyPrice = (this.buyPrice * this.quantity + buyPrice * quantity) / (quantity + this.quantity);
+        this.marketPrice = buyPrice;
+        this.quantity += quantity;
+        return this.buyPrice;
+    }
+
     // REQUIRES: period is number of quarters of year
     // EFFECTS: calculating the profit gained from dividend for a given period of time
-    public int divProfit(int period) {
+    public double divProfit(int period) {
         return this.quantity * this.marketPrice * this.divYield / 100;
     }
 
     // EFFECTS: calculating the profit in $US up to now
-    private int calcProfit() {
+    private double calcProfit() {
         return this.quantity * (this.marketPrice - this.buyPrice);
     }
 
     // EFFECTS: calculating the profit in percentage up to now
-    private int calcProfitPercent() {
+    private double calcProfitPercent() {
         return calcProfit() / totalCost() * 100;
     }
 
-    private int totalCost() {
+    private double totalCost() {
         return this.buyPrice * this.quantity;
     }
 
-    public int getDivYield() {
+    public double getDivYield() {
         return divYield;
     }
 
-    public int getMarketPrice() {
+    public double getMarketPrice() {
         return marketPrice;
     }
 
-    public int getSellPrice() {
+    public double getSellPrice() {
         return sellPrice;
     }
 
-    public int getBuyPrice() {
+    public double getBuyPrice() {
         return buyPrice;
     }
 
