@@ -6,15 +6,19 @@ import model.Stock;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// Portfolio tracker application
 public class PortfolioTrackerApp {
 
     private Scanner input;
     private ArrayList<Exchange> exchanges;
 
+    // EFFECTS: runs the portfolio tracker application
     public PortfolioTrackerApp() {
         runTracker();
     }
 
+    // MODIFIES: this
+    // EFFECTS: processes user input
     private void runTracker() {
         input = new Scanner(System.in);
         boolean keepGoing = true;
@@ -34,6 +38,8 @@ public class PortfolioTrackerApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: select the appropriate function based on the user input
     private void menuSwitchCases(String command) {
         switch (command) {
             case "1":
@@ -68,7 +74,7 @@ public class PortfolioTrackerApp {
         System.out.println("\t6 -> quit");
     }
 
-
+    // EFFECTS: prints the summary of all the stocks in all of the exchanges
     private void listOverview() {
         String summery = "";
         if (this.exchanges.isEmpty()) {
@@ -81,6 +87,7 @@ public class PortfolioTrackerApp {
         }
     }
 
+    // EFFECTS: find a stock from the name given by the user and returns it
     private Stock lookForStock() {
         String mic;
         System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
@@ -102,6 +109,8 @@ public class PortfolioTrackerApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: update the market price of a stock given by the user
     private void updatePrice() {
         Stock stock = lookForStock();
         if (!(stock == null)) {
@@ -113,6 +122,8 @@ public class PortfolioTrackerApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: sell a number of shares for a given stock by the user
     private void sell() {
         Stock stock = lookForStock();
         if (!(stock == null)) {
@@ -131,6 +142,8 @@ public class PortfolioTrackerApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: construct a new stock in an exchange, locate its exchange and ensures that it does not exist already
     private void newStock() {
         String mic;
         System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
@@ -143,6 +156,8 @@ public class PortfolioTrackerApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: construct a new stock in an exchange,
     private void newStockElseCase(Exchange exchange) {
         String name;
         String symbol;
@@ -169,6 +184,8 @@ public class PortfolioTrackerApp {
         }
     }
 
+
+    // EFFECTS: look for an exchange by it MIC and returns it, if it did nto exist, it returns null
     private Exchange searchForNameOfExchange(String mic) {
         for (Exchange ex : this.exchanges) {
             if (mic.equals(ex.getMic())) {
@@ -178,6 +195,8 @@ public class PortfolioTrackerApp {
         return null;
     }
 
+    // MODIFIES: this
+    // EFFECTS: construct a new exchange in and add it to the list of exchanges
     private void newExchange() {
         String name;
         String mic;

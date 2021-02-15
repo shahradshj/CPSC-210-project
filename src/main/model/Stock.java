@@ -13,7 +13,7 @@ public class Stock {
     private double divYield; //dividend is in percentage;
     private int quantity;
 
-
+    // Construct a new stock from the given information
     public Stock(String name, String symbol, int quantity, double buyPrice, double divYield) {
         this.name = name;
         this.symbol = symbol;
@@ -24,6 +24,7 @@ public class Stock {
         this.divYield = divYield;
     }
 
+    // EFFECTS: returns a string that contains information about this stock
     public String overview() {
         String title = this.name + "(" + this.symbol + ")\n";
         String cost = "\t - Total cost: $US" + this.buyPrice + " * " + this.quantity + " = $US" + totalCost() + "\n";
@@ -78,6 +79,8 @@ public class Stock {
         return calcProfit() / totalCost() * 100;
     }
 
+
+    // EFFECTS: return the total cost of buying this stock
     private double totalCost() {
         return this.buyPrice * this.quantity;
     }
