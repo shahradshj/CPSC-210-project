@@ -1,6 +1,7 @@
 package ui;
 
 import model.Exchange;
+import model.Stock;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ public class PortfolioTrackerApp {
         input = new Scanner(System.in);
         boolean keepGoing = true;
         String command = null;
+        exchanges = new ArrayList<>();
 
         while (keepGoing) {
             displayMenu();
@@ -44,7 +46,7 @@ public class PortfolioTrackerApp {
                 sell();
                 break;
             case "4":
-                buyMore();
+                updatePrice();
                 break;
             case "5":
                 listOverview();
@@ -61,7 +63,7 @@ public class PortfolioTrackerApp {
         System.out.println("\t1 -> add new exchange");
         System.out.println("\t2 -> add new stock");
         System.out.println("\t3 -> sell stocks");
-        System.out.println("\t4 -> buy more stocks");
+        System.out.println("\t4 -> update market price");
         System.out.println("\t5 -> see list of all stocks");
         System.out.println("\t6 -> quit");
     }
@@ -69,27 +71,73 @@ public class PortfolioTrackerApp {
 
     private void listOverview() {
         String summery = "";
-        for (Exchange s : exchanges) {
-            summery += s.listOfStocks() + "\n";
+        if (this.exchanges.isEmpty()) {
+            System.out.println("You do not have any stocks!");
+        } else {
+            for (Exchange s : exchanges) {
+                summery += s.listOfStocks() + "\n";
+            }
+            System.out.print(summery);
         }
-        System.out.println(summery);
-
     }
 
-    private void buyMore() {
+    private Stock lookForStock() {
+        String mic;
+        System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
+        mic = input.next();
+        Exchange exchange = searchForNameOfExchange(mic);
+        if (exchange == null) {
+            System.out.println("Exchange does not exist!");
+            return null;
+        } else {
+            System.out.println("Please the name of the stock:");
+            mic = input.next();
+            Stock stock = exchange.searchForName(mic);
+            if (stock == null) {
+                System.out.println("Stock does not exist!");
+                return null;
+            } else {
+                return stock;
+            }
+        }
+    }
 
+    private void updatePrice() {
+        Stock stock = lookForStock();
+        if (!(stock == null)) {
+            System.out.println("Please enter new price:");
+            double newPrice;
+            newPrice = input.nextDouble();
+            stock.updateMarketPrice(newPrice);
+            listOverview();
+        }
     }
 
     private void sell() {
+        Stock stock = lookForStock();
+        if (!(stock == null)) {
+            System.out.println("Please enter number of shares that you have sold:");
+            int quantity;
+            quantity = input.nextInt();
+            if (quantity > stock.getQuantity()) {
+                System.out.println("Sorry! You do not have that many shares!");
+            } else {
+                System.out.println("Please enter your sell price:");
+                double sellPrice;
+                sellPrice = input.nextDouble();
+                stock.sell(quantity, sellPrice);
+                listOverview();
+            }
+        }
     }
 
     private void newStock() {
         String mic;
-        System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:\n");
+        System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
         mic = input.next();
         Exchange exchange = searchForNameOfExchange(mic);
         if (exchange == null) {
-            System.out.println("Exchange does not exist!\n");
+            System.out.println("Exchange does not exist!");
         } else {
             newStockElseCase(exchange);
         }
@@ -102,24 +150,28 @@ public class PortfolioTrackerApp {
         double buyPrice;
         double divYield;
 
-        System.out.println("Please enter the name of stock:\n");
+        System.out.println("Please enter the name of stock:");
         name = input.next();
-        System.out.println("Please enter the symbol of:\n");
+        System.out.println("Please enter the symbol of:");
         symbol = input.next();
-        System.out.println("Please enter the quantity of stock bought:\n");
+        System.out.println("Please enter the quantity of stock bought:");
         quantity = input.nextInt();
-        System.out.println("Please enter the price you paid for each share:\n");
+        System.out.println("Please enter the price you paid for each share:");
         buyPrice = input.nextDouble();
-        System.out.println("Please enter the dividend yield for stock\n");
+        System.out.println("Please enter the dividend yield in percentage for the stock");
         divYield = input.nextDouble();
-        if (!exchange.addStock(name, symbol, quantity, buyPrice, divYield)) {
-            System.out.println("Stock already exist!\n");
+        Stock stock = exchange.makeStock(name, symbol, quantity, buyPrice, divYield);
+        if (!exchange.addStock(stock)) {
+            System.out.println("Stock already exist!");
+        } else {
+            System.out.println("Your stock was added successfully!");
+            listOverview();
         }
     }
 
     private Exchange searchForNameOfExchange(String mic) {
         for (Exchange ex : this.exchanges) {
-            if (mic.equals(ex.getName())) {
+            if (mic.equals(ex.getMic())) {
                 return ex;
             }
         }
@@ -140,9 +192,11 @@ public class PortfolioTrackerApp {
 
         Exchange exchange = new Exchange(name, mic, country);
         if (this.exchanges.contains(exchange)) {
-            System.out.println("Exchange already exist!\n");
+            System.out.println("Exchange already exist!");
         } else {
             exchanges.add(exchange);
+            System.out.println("You added a new exchange successful!");
+            listOverview();
         }
     }
 

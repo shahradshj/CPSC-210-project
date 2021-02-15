@@ -28,9 +28,10 @@ public class Stock {
         String title = this.name + "(" + this.symbol + ")\n";
         String cost = "\t - Total cost: $US" + this.buyPrice + " * " + this.quantity + " = $US" + totalCost() + "\n";
         String currentPrice = "\t - Market Price: $US" + this.marketPrice + "\n";
+        String cuttentValue = "\t - Today's value: $US" + this.marketPrice * this.quantity + "\n";
         String profit = "\t - Profit:  $US "  + calcProfit() + " - " + calcProfitPercent() + "%\n";
 
-        return title + cost + currentPrice + profit;
+        return title + cost + currentPrice + cuttentValue + profit;
     }
 
     // Requires: positive double
@@ -51,15 +52,15 @@ public class Stock {
         return quantity * (this.buyPrice - sellPrice);
     }
 
-    // Requires: one positive integer and one positive double
-    // MODIFIES: this
-    // EFFECTS: add to the number of owned quantity and calculate new average for buy price, return new buy price
-    public double buyMore(int quantity, double buyPrice) {
-        this.buyPrice = (this.buyPrice * this.quantity + buyPrice * quantity) / (quantity + this.quantity);
-        this.marketPrice = buyPrice;
-        this.quantity += quantity;
-        return this.buyPrice;
-    }
+//    // Requires: one positive integer and one positive double
+//    // MODIFIES: this
+//    // EFFECTS: add to the number of owned quantity and calculate new average for buy price, return new buy price
+//    public double buyMore(int quantity, double buyPrice) {
+//        this.buyPrice = (this.buyPrice * this.quantity + buyPrice * quantity) / (quantity + this.quantity);
+//        this.marketPrice = buyPrice;
+//        this.quantity += quantity;
+//        return this.buyPrice;
+//    }
 
     // REQUIRES: period is number of quarters of year
     // EFFECTS: calculating the profit gained from dividend for a given period of time
@@ -81,21 +82,21 @@ public class Stock {
         return this.buyPrice * this.quantity;
     }
 
-    public double getDivYield() {
-        return divYield;
-    }
-
-    public double getMarketPrice() {
-        return marketPrice;
-    }
-
-    public double getSellPrice() {
-        return sellPrice;
-    }
-
-    public double getBuyPrice() {
-        return buyPrice;
-    }
+//    public double getDivYield() {
+//        return divYield;
+//    }
+//
+//    public double getMarketPrice() {
+//        return marketPrice;
+//    }
+//
+//    public double getSellPrice() {
+//        return sellPrice;
+//    }
+//
+//    public double getBuyPrice() {
+//        return buyPrice;
+//    }
 
     public int getQuantity() {
         return quantity;
@@ -105,7 +106,7 @@ public class Stock {
         return name;
     }
 
-    public String getSymbol() {
-        return symbol;
-    }
+//    public String getSymbol() {
+//        return symbol;
+//    }
 }
