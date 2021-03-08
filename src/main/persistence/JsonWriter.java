@@ -22,6 +22,7 @@ public class JsonWriter {
     // MODIFIES: this
     // EFFECTS: opens writer; throws FileNotFoundException if destination file cannot
     // be opened for writing
+    @SuppressWarnings("checkstyle:Indentation")
     public void open() throws FileNotFoundException {
        writer = new PrintWriter(new File(destination));
     }

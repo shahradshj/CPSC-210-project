@@ -93,7 +93,7 @@ public class Exchange implements Writable {
         return jsonArray;
     }
 
-//    public String getName() {
-//        return name;
-//    }
+    public String getName() {
+        return name;
+    }
 }

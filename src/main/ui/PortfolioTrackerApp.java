@@ -2,15 +2,24 @@ package ui;
 
 import model.Exchange;
 import model.Stock;
+import org.json.JSONArray;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 // Portfolio tracker application
 public class PortfolioTrackerApp {
 
+    private static final String JSON_STORE = "./data/";
     private Scanner input;
     private ArrayList<Exchange> exchanges;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECTS: runs the portfolio tracker application
     public PortfolioTrackerApp() {
@@ -29,7 +38,7 @@ public class PortfolioTrackerApp {
             displayMenu();
             command = this.input.next();
 
-            if (command.equals("6")) {
+            if (command.equals("q")) {
                 System.out.println("\nGoodbye!");
                 keepGoing = false;
             } else {
@@ -40,6 +49,7 @@ public class PortfolioTrackerApp {
 
     // MODIFIES: this
     // EFFECTS: select the appropriate function based on the user input
+    @SuppressWarnings("checkstyle:MethodLength")
     private void menuSwitchCases(String command) {
         switch (command) {
             case "1":
@@ -57,6 +67,12 @@ public class PortfolioTrackerApp {
             case "5":
                 listOverview();
                 break;
+            case "6":
+                saveList();
+                break;
+            case "7":
+                loadList();
+                break;
             default:
                 System.out.println("Selection not valid...");
         }
@@ -71,7 +87,9 @@ public class PortfolioTrackerApp {
         System.out.println("\t3 -> sell stocks");
         System.out.println("\t4 -> update market price");
         System.out.println("\t5 -> see list of all stocks");
-        System.out.println("\t6 -> quit");
+        System.out.println("\t6 -> save an exchange");
+        System.out.println("\t7 -> load an exchange");
+        System.out.println("\tq -> quit");
     }
 
     // EFFECTS: prints the summary of all the stocks in all of the exchanges
@@ -216,6 +234,45 @@ public class PortfolioTrackerApp {
             exchanges.add(exchange);
             System.out.println("You added a new exchange successful!");
             listOverview();
+        }
+    }
+
+    // EFFECTS: saves an exchange to file
+    private void saveList() {
+        String mic;
+        System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
+        mic = input.next();
+        Exchange exchange = searchForNameOfExchange(mic);
+        if (exchange == null) {
+            System.out.println("Exchange does not exist!");
+        } else {
+            String location = JSON_STORE + mic + ".json";
+            try {
+                jsonWriter = new JsonWriter(location);
+                jsonWriter.open();
+                jsonWriter.write(exchange);
+                jsonWriter.close();
+                System.out.println("Saved " + mic + " to " + location);
+            } catch (FileNotFoundException e) {
+                System.out.println("Unable to write to file: " + location);
+            }
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads an exchange from file
+    private void loadList() {
+        String mic;
+        System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
+        mic = input.next();
+        String location = JSON_STORE + mic + ".json";
+        jsonReader = new JsonReader(location);
+        try {
+            Exchange exchange = jsonReader.read();
+            exchanges.add(exchange);
+            System.out.println("Loaded " + exchange.getName() + " from " + location);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + location);
         }
     }
 
