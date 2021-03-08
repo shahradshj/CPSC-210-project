@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+// Most of the code is from JsonSerializationDemo
+
 // Represents a reader that reads exchange from JSON data stored in file
 public class JsonReader {
     private String source;

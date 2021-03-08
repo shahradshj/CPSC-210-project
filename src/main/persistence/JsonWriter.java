@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+// Most of the code is from JsonSerializationDemo
+
 // Represents a writer that writes JSON representation of exchanges to file
 public class JsonWriter {
     private static final int TAB = 4;
@@ -22,7 +24,6 @@ public class JsonWriter {
     // MODIFIES: this
     // EFFECTS: opens writer; throws FileNotFoundException if destination file cannot
     // be opened for writing
-    @SuppressWarnings("checkstyle:Indentation")
     public void open() throws FileNotFoundException {
        writer = new PrintWriter(new File(destination));
     }
