@@ -19,6 +19,9 @@ Personally, I like investing in different markets such as Bitcoin or stock marke
 - As a user, I want to be able to add **total cost** to each of my stocks
 - As a user, I want to be able to add the **sell price** to each of my stocks
 - As a user, I want to be able to update **market value** of each of my stocks
+- As a user, I want to be able to save my stock list to file
+- As a user, I want to be able to be able to load my to-do list from file
+
 
 
 

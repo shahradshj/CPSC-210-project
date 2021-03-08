@@ -2,7 +2,10 @@ package model;
 
 // Each object of this class represent a specific stock from the stock market
 
-public class Stock {
+import org.json.JSONObject;
+import persistence.Writable;
+
+public class Stock implements Writable {
     // Buy, sell, and market price are in $US.
     private String name;
     private String symbol;
@@ -107,6 +110,17 @@ public class Stock {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("symbol", symbol);
+        json.put("quantity", quantity);
+        json.put("buyPrice", buyPrice);
+        json.put("divYield", divYield);
+        return json;
     }
 
 //    public String getSymbol() {

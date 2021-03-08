@@ -2,9 +2,13 @@ package model;
 
 // This class represent a stock exchange.
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 
-public class Exchange {
+public class Exchange implements Writable {
     private String name;
     private String mic; // market identifier code
     private String country;
@@ -66,6 +70,27 @@ public class Exchange {
 
     public String getMic() {
         return mic;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("mic", mic);
+        json.put("country", country);
+        json.put("stocks", thingiesToJson());
+        return json;
+    }
+
+    // EFFECTS: returns stocks in this exchange as a JSON array
+    private JSONArray thingiesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Stock stock : stocks) {
+            jsonArray.put(stock.toJson());
+        }
+
+        return jsonArray;
     }
 
 //    public String getName() {
