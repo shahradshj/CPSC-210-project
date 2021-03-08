@@ -41,6 +41,10 @@ public class PortfolioTrackerApp {
             if (command.equals("q")) {
                 System.out.println("\nGoodbye!");
                 keepGoing = false;
+            } else if (command.equals("6")) {
+                saveList();
+            } else if (command.equals("7")) {
+                loadList();
             } else {
                 menuSwitchCases(command);
             }
@@ -49,7 +53,6 @@ public class PortfolioTrackerApp {
 
     // MODIFIES: this
     // EFFECTS: select the appropriate function based on the user input
-    @SuppressWarnings("checkstyle:MethodLength")
     private void menuSwitchCases(String command) {
         switch (command) {
             case "1":
@@ -66,12 +69,6 @@ public class PortfolioTrackerApp {
                 break;
             case "5":
                 listOverview();
-                break;
-            case "6":
-                saveList();
-                break;
-            case "7":
-                loadList();
                 break;
             default:
                 System.out.println("Selection not valid...");
