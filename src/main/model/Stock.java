@@ -27,6 +27,17 @@ public class Stock implements Writable {
         this.divYield = divYield;
     }
 
+    // Construct a new stock from the given information
+    public Stock(String name, String symbol, int quantity, double buyPrice, double marketPrice, double divYield) {
+        this.name = name;
+        this.symbol = symbol;
+        this.quantity = quantity;
+        this.buyPrice = buyPrice;
+        this.sellPrice = -1; // -1 for sell price indicate that it has not been sold yet in any quantity
+        this.marketPrice = marketPrice;
+        this.divYield = divYield;
+    }
+
     // EFFECTS: returns a string that contains information about this stock
     public String overview() {
         String title = this.name + "(" + this.symbol + ")\n";
@@ -119,6 +130,7 @@ public class Stock implements Writable {
         json.put("symbol", symbol);
         json.put("quantity", quantity);
         json.put("buyPrice", buyPrice);
+        json.put("marketPrice", marketPrice);
         json.put("divYield", divYield);
         return json;
     }

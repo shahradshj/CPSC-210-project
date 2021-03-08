@@ -69,8 +69,9 @@ public class JsonReader {
         String symbol = jsonObject.getString("symbol");
         Integer quantity = jsonObject.getInt("quantity");
         double buyPrice = jsonObject.getDouble("buyPrice");
+        double marketPrice = jsonObject.getDouble("marketPrice");
         double divYield = jsonObject.getDouble("divYield");
-        Stock stock = new Stock(name, symbol, quantity, buyPrice, divYield);
+        Stock stock = new Stock(name, symbol, quantity, buyPrice, marketPrice, divYield);
         exchange.addStock(stock);
     }
 }
