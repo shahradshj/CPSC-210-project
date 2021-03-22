@@ -66,4 +66,9 @@ class TestStock {
                 "\t - Profit:  $US 500.0 - 25.0%\n";
         assertEquals(googlWPOverview, googlWithProfit.overview());
     }
+
+    @Test
+    void testDivProfit() {
+        assertEquals(10,googl.divProfit(4));
+    }
 }

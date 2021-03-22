@@ -122,4 +122,15 @@ public class TestExchange {
                 "\tThere is no stock in this exchange!\n";
         assertEquals(ny, nyse.listOfStocks());
     }
+
+    @Test
+    void testMakeStock() {
+        aapl = nasdaq.makeStock("Apple", "AAPL", 5, 120, 2.5);
+        String aaplOverview = "Apple(AAPL)\n" +
+                "\t - Total cost: $US120.0 * 5 = $US600.0\n" +
+                "\t - Market Price: $US120.0\n" +
+                "\t - Today's value: $US600.0\n" +
+                "\t - Profit:  $US 0.0 - 0.0%\n";
+        assertEquals(aaplOverview, aapl.overview());
+    }
 }
