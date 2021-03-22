@@ -79,9 +79,9 @@ public class Stock implements Writable {
 
     // REQUIRES: period is number of quarters of year
     // EFFECTS: calculating the profit gained from dividend for a given period of time
-    public double divProfit(int period) {
-        return this.quantity * this.marketPrice * this.divYield / 100;
-    }
+//    public double divProfit(int period) {
+//        return this.quantity * this.marketPrice * this.divYield / 100;
+//    }
 
     // EFFECTS: calculating the profit in $US up to now
     private double calcProfit() {

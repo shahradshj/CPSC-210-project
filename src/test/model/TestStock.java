@@ -9,12 +9,14 @@ class TestStock {
     Stock aapl;
     Stock msft;
     Stock googl;
+    Stock googlWithProfit;
 
     @BeforeEach
     void setup() {
         aapl = new Stock("Apple", "AAPL", 5, 120, 2.5);
         msft = new Stock("Microsoft", "MSFT", 10, 220, 1.5);
         googl = new Stock("Alphabet", "GOOGL", 1, 2000, 0.5);
+        googlWithProfit = new Stock("Alphabetw/p", "GOOGLw/p", 1, 2000, 2500, 0.5);
     }
 
     @Test
@@ -56,5 +58,12 @@ class TestStock {
                 "\t - Today's value: $US2000.0\n" +
                 "\t - Profit:  $US 0.0 - 0.0%\n";
         assertEquals(googlOverview, googl.overview());
+
+        String googlWPOverview = "Alphabetw/p(GOOGLw/p)\n" +
+                "\t - Total cost: $US2000.0 * 1 = $US2000.0\n" +
+                "\t - Market Price: $US2500.0\n" +
+                "\t - Today's value: $US2500.0\n" +
+                "\t - Profit:  $US 500.0 - 25.0%\n";
+        assertEquals(googlWPOverview, googlWithProfit.overview());
     }
 }
