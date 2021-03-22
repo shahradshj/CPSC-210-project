@@ -1,7 +1,11 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import persistence.JsonReader;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestExchange {
@@ -13,6 +17,10 @@ public class TestExchange {
     Stock amzn;
     Stock dis;
 
+    Exchange readFromJSON;
+    JsonReader jsonReader;
+    JSONObject jsonObject;
+
     @BeforeEach
     void setup() {
         nyse = new Exchange("New York Stock Exchange", "NYSC", "US");
@@ -22,6 +30,11 @@ public class TestExchange {
         googl = new Stock("Alphabet", "GOOGL", 1, 2000, 0.5);
         amzn = new Stock("Amazon", "AMZN", 2, 3000, 1);
         dis = new Stock("Walt Disney Co", "DIS", 2, 190, 3);
+    }
+
+    @Test
+    void toJason() {
+        jsonObject = nasdaq.toJson();
     }
 
     @Test
