@@ -2,7 +2,6 @@ package ui;
 
 import model.Exchange;
 import model.Stock;
-import model.exception.NotAnInteger;
 import org.json.JSONArray;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// Portfolio tracker application
+// Portfolio tracker application console
 public class PortfolioTrackerApp {
 
     private static final String JSON_STORE = "./data/";
