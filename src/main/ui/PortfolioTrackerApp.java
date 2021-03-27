@@ -2,6 +2,7 @@ package ui;
 
 import model.Exchange;
 import model.Stock;
+import model.exception.NotAnInteger;
 import org.json.JSONArray;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -144,7 +145,8 @@ public class PortfolioTrackerApp {
         if (!(stock == null)) {
             System.out.println("Please enter number of shares that you have sold:");
             int quantity;
-            quantity = input.nextInt();
+//            quantity = input.nextInt();
+            quantity = getIntForNumberOfStocks();
             if (quantity > stock.getQuantity()) {
                 System.out.println("Sorry! You do not have that many shares!");
             } else {
@@ -155,6 +157,21 @@ public class PortfolioTrackerApp {
                 listOverview();
             }
         }
+    }
+
+    // EFFECTS: returns an int for number of stocks or throws an NotAnIntegerException
+    private int getIntForNumberOfStocks() {
+        int num;
+        try {
+            num = input.nextInt();
+        } catch (Exception e) {
+            System.out.println("Please enter an integer:");
+            if (input.hasNext()) {
+                input.next();
+            }
+            num = getIntForNumberOfStocks();
+        }
+        return num;
     }
 
     // MODIFIES: this
@@ -185,7 +202,7 @@ public class PortfolioTrackerApp {
         System.out.println("Please enter the symbol of:");
         symbol = input.next();
         System.out.println("Please enter the quantity of stock bought:");
-        quantity = input.nextInt();
+        quantity = getIntForNumberOfStocks();
         System.out.println("Please enter the price you paid for each share:");
         buyPrice = input.nextDouble();
         System.out.println("Please enter the dividend yield in percentage for the stock");
