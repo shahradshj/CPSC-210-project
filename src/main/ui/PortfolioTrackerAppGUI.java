@@ -28,7 +28,7 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
     JButton addStock;
     JButton addExchange;
 
-    JLabel displayLabel;
+    JTextArea displayLabel;
     JFrame frame;
 
     PortfolioTrackerAppGUI() {
@@ -39,7 +39,8 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
 
         exchanges = new ArrayList<>();
         addButtons();
-        displayLabel = new JLabel("");
+        displayLabel = new JTextArea("");
+        displayLabel.setEditable(false);
 
         listOverview();
 
@@ -119,7 +120,6 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
         mic = JOptionPane.showInputDialog("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
         Exchange exchange = searchForNameOfExchange(mic);
         if (exchange == null) {
-            System.out.println("Exchange does not exist!");
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null,"Exchange doesn't exist!");
         } else {
@@ -164,6 +164,7 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
             Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null,"Stock already exist!");
         } else {
+            Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null,"Your stock was added successfully!");
             listOverview();
         }
@@ -237,6 +238,7 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null,"Exchange already exist!");
         } else {
             exchanges.add(exchange);
+            Toolkit.getDefaultToolkit().beep();
             JOptionPane.showMessageDialog(null,"Exchange added!");
             listOverview();
         }
