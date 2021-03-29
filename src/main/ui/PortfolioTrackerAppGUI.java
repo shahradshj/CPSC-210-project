@@ -2,11 +2,15 @@ package ui;
 
 import model.Exchange;
 import model.Stock;
+import persistence.JsonWriter;
+import persistence.JsonReader;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 // Portfolio tracker application GUI
@@ -16,6 +20,8 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
     private static final int HEIGHT = 1000;
     private static final String JSON_STORE = "./data/";
     private ArrayList<Exchange> exchanges;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     JButton load;
     JButton save;
@@ -34,6 +40,7 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
         exchanges = new ArrayList<>();
         addButtons();
         displayLabel = new JLabel("");
+
         listOverview();
 
 //        frame.pack();
@@ -76,9 +83,60 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
         } else if (e.getActionCommand().equals("stock")) {
             newStock();
         } else if (e.getActionCommand().equals("save")) {
-
+            saveList();
         } else if (e.getActionCommand().equals("load")) {
+            loadList();
+        }
+    }
 
+    // MODIFIES: this
+    // EFFECTS: loads an exchange from file
+    private void loadList() {
+        String mic;
+        System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
+        mic = JOptionPane.showInputDialog("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
+        String location = JSON_STORE + mic + ".json";
+        jsonReader = new JsonReader(location);
+        try {
+            Exchange exchange = jsonReader.read();
+            exchanges.add(exchange);
+            System.out.println("Loaded " + exchange.getName() + " from " + location);
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,
+                    "Loaded " + exchange.getName() + " from " + location);
+            listOverview();
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + location);
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,"Unable to read from file: " + location);
+        }
+    }
+
+    // EFFECTS: saves an exchange to file
+    private void saveList() {
+        String mic;
+        System.out.println("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
+        mic = JOptionPane.showInputDialog("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
+        Exchange exchange = searchForNameOfExchange(mic);
+        if (exchange == null) {
+            System.out.println("Exchange does not exist!");
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,"Exchange doesn't exist!");
+        } else {
+            String location = JSON_STORE + mic + ".json";
+            try {
+                jsonWriter = new JsonWriter(location);
+                jsonWriter.open();
+                jsonWriter.write(exchange);
+                jsonWriter.close();
+                System.out.println("Saved " + mic + " to " + location);
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(null,"Saved " + mic + " to " + location);
+            } catch (FileNotFoundException e) {
+                System.out.println("Unable to write to file: " + location);
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(null,"Unable to write to file: " + location);
+            }
         }
     }
 
@@ -198,7 +256,15 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
                 summery += s.listOfStocks() + "";
             }
         }
+
         displayLabel.setText(summery);
         frame.add(displayLabel);
+
+//        String[] lines = summery.split("\n");
+//        for (String line : lines) {
+//            JLabel label = new JLabel(line);
+//            frame.add(label);
+//            System.out.print(line + " ");
+//        }
     }
 }
