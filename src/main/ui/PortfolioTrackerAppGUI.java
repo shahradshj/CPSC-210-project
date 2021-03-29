@@ -41,24 +41,31 @@ public class PortfolioTrackerAppGUI implements ActionListener {
         frame.add(label);
 
         frame.setVisible(true);
+        frame.pack();
     }
+
 
     private void addButtons() {
         addExchange = new JButton("Add Exchange");
         addExchange.addActionListener(this);
         addExchange.setActionCommand("exchange");
-        addStock = new JButton("stock");
+
+        addStock = new JButton("Add Stock");
         addStock.addActionListener(this);
-        save = new JButton("save");
+        addStock.setActionCommand("stock");
+
+        save = new JButton("Save an exchange");
         save.addActionListener(this);
-        load = new JButton("load");
+        save.setActionCommand("save");
+
+        load = new JButton("Load an exchange");
         load.addActionListener(this);
+        load.setActionCommand("load");
 
         frame.add(addExchange);
         frame.add(addStock);
         frame.add(save);
         frame.add(load);
-        frame.pack();
     }
 
     //    /**
@@ -74,7 +81,7 @@ public class PortfolioTrackerAppGUI implements ActionListener {
 //
 //        } else if (e.getActionCommand().equals("save")) {
 //
-//        } else {
+//        } else if (e.getActionCommand().equals("load")) {
 //
 //        }
     }
