@@ -19,6 +19,7 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 1000;
     private static final String JSON_STORE = "./data/";
+    
     private ArrayList<Exchange> exchanges;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -27,10 +28,12 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
     JButton save;
     JButton addStock;
     JButton addExchange;
+    JButton updatePrice;
 
     JTextArea displayLabel;
     JFrame frame;
 
+    // EFFECTS: runs the portfolio tracker application (GUI version)
     PortfolioTrackerAppGUI() {
         frame = new JFrame("Portfolio tracker");
         frame.setLayout(new FlowLayout());
@@ -49,6 +52,7 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
     }
 
 
+    // EFFECTS: add buttons to the JFrame
     private void addButtons() {
         addExchange = new JButton("Add Exchange");
         addExchange.addActionListener(this);
@@ -66,10 +70,15 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
         load.addActionListener(this);
         load.setActionCommand("load");
 
+        updatePrice = new JButton("Update the price of a Stock");
+        updatePrice.addActionListener(this);
+        updatePrice.setActionCommand("update");
+
         frame.add(addExchange);
         frame.add(addStock);
         frame.add(save);
         frame.add(load);
+        frame.add(updatePrice);
     }
 
     //    /**
@@ -87,7 +96,46 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
             saveList();
         } else if (e.getActionCommand().equals("load")) {
             loadList();
+        } else if (e.getActionCommand().equals("update")) {
+            updatePrice();
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: update the market price of a stock given by the user
+    private void updatePrice() {
+        String mic;
+        String name;
+        String priceString;
+        double newPrice;
+        mic = JOptionPane.showInputDialog("Please enter the Market Identifier Code (MIC) of exchange for your stock:");
+        Exchange exchange = searchForNameOfExchange(mic);
+        if (exchange == null) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,"Exchange doesn't exist!");
+        } else {
+            name = JOptionPane.showInputDialog("Please enter the name for your stock:");
+            Stock stock = exchange.searchForName(name);
+            if (stock == null) {
+                Toolkit.getDefaultToolkit().beep();
+                JOptionPane.showMessageDialog(null,"Stock doesn't exist!");
+            } else {
+                updatePriceElseCase(stock);
+            }
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: update the market price of a stock given by the user (just updating the price)
+    private void updatePriceElseCase(Stock stock) {
+        String priceString;
+        double newPrice;
+        priceString = JOptionPane.showInputDialog("Please enter new price:");
+        newPrice = Double.parseDouble(priceString);
+        stock.updateMarketPrice(newPrice);
+        Toolkit.getDefaultToolkit().beep();
+        JOptionPane.showMessageDialog(null,"Your stock's price was updated successfully!");
+        listOverview();
     }
 
     // MODIFIES: this
@@ -170,6 +218,9 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
         }
     }
 
+    // REQUIRES: exchange exist in exchanges
+    // MODIFIES: this
+    // EFFECTS: construct a new stock in the given exchange
     private Stock makeTheStockForElseCase(Exchange exchange) {
         String name;
         String symbol;
@@ -244,6 +295,7 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: returns true only if exchange is in the list of exchanges
     protected boolean alreadyInList(Exchange ex) {
         return exchanges.contains(ex);
     }
@@ -261,12 +313,5 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
 
         displayLabel.setText(summery);
         frame.add(displayLabel);
-
-//        String[] lines = summery.split("\n");
-//        for (String line : lines) {
-//            JLabel label = new JLabel(line);
-//            frame.add(label);
-//            System.out.print(line + " ");
-//        }
     }
 }
