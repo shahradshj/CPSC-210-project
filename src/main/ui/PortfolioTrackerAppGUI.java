@@ -1,5 +1,7 @@
 package ui;
 
+import exception.DidNotFindStock;
+import exception.NegativeNumber;
 import model.Exchange;
 import model.Stock;
 import persistence.JsonWriter;
@@ -115,13 +117,20 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null,"Exchange doesn't exist!");
         } else {
             name = JOptionPane.showInputDialog("Please enter the name for your stock:");
-            Stock stock = exchange.searchForName(name);
-            if (stock == null) {
+            Stock stock = null;
+            try {
+                stock = exchange.searchForName(name);
+                updatePriceElseCase(stock);
+            } catch (DidNotFindStock didNotFindStock) {
                 Toolkit.getDefaultToolkit().beep();
                 JOptionPane.showMessageDialog(null,"Stock doesn't exist!");
-            } else {
-                updatePriceElseCase(stock);
             }
+//            if (stock == null) {
+//                Toolkit.getDefaultToolkit().beep();
+//                JOptionPane.showMessageDialog(null,"Stock doesn't exist!");
+//            } else {
+//                updatePriceElseCase(stock);
+//            }
         }
     }
 
@@ -132,10 +141,16 @@ public class PortfolioTrackerAppGUI extends JFrame implements ActionListener {
         double newPrice;
         priceString = JOptionPane.showInputDialog("Please enter new price:");
         newPrice = Double.parseDouble(priceString);
-        stock.updateMarketPrice(newPrice);
-        Toolkit.getDefaultToolkit().beep();
-        JOptionPane.showMessageDialog(null,"Your stock's price was updated successfully!");
-        listOverview();
+        try {
+            stock.updateMarketPrice(newPrice);
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,"Your stock's price was updated successfully!");
+        } catch (NegativeNumber negativeNumber) {
+            Toolkit.getDefaultToolkit().beep();
+            JOptionPane.showMessageDialog(null,"Error! Entered price was negative");
+        } finally {
+            listOverview();
+        }
     }
 
     // MODIFIES: this

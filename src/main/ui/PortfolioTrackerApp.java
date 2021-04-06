@@ -1,14 +1,15 @@
 package ui;
 
+import exception.DidNotFindStock;
+import exception.NegativeNumber;
+import exception.NotSufficientFund;
 import model.Exchange;
 import model.Stock;
-import org.json.JSONArray;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -114,13 +115,20 @@ public class PortfolioTrackerApp {
         } else {
             System.out.println("Please the name of the stock:");
             mic = input.next();
-            Stock stock = exchange.searchForName(mic);
-            if (stock == null) {
+            try {
+                Stock stock = exchange.searchForName(mic);
+                return stock;
+            } catch (DidNotFindStock didNotFindStock) {
                 System.out.println("Stock does not exist!");
                 return null;
-            } else {
-                return stock;
             }
+//            Stock stock = exchange.searchForName(mic);
+//            if (stock == null) {
+//                System.out.println("Stock does not exist!");
+//                return null;
+//            } else {
+//                return stock;
+//            }
         }
     }
 
@@ -132,7 +140,11 @@ public class PortfolioTrackerApp {
             System.out.println("Please enter new price:");
             double newPrice;
             newPrice = input.nextDouble();
-            stock.updateMarketPrice(newPrice);
+            try {
+                stock.updateMarketPrice(newPrice);
+            } catch (NegativeNumber negativeNumber) {
+                System.out.println("Error! Price should be positive!");
+            }
             listOverview();
         }
     }
@@ -152,8 +164,15 @@ public class PortfolioTrackerApp {
                 System.out.println("Please enter your sell price:");
                 double sellPrice;
                 sellPrice = input.nextDouble();
-                stock.sell(quantity, sellPrice);
-                listOverview();
+                try {
+                    stock.sell(quantity, sellPrice);
+                } catch (NegativeNumber negativeNumber) {
+                    System.out.println("Error! Price should be positive!");
+                } catch (NotSufficientFund notSufficientFund) {
+                    System.out.println("Error! You do not have that many shares available!");
+                } finally {
+                    listOverview();
+                }
             }
         }
     }

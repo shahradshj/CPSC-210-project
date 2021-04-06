@@ -2,6 +2,8 @@ package model;
 
 // Each object of this class represent a specific stock from the stock market
 
+import exception.NegativeNumber;
+import exception.NotSufficientFund;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -49,10 +51,12 @@ public class Stock implements Writable {
         return title + cost + currentPrice + cuttentValue + profit;
     }
 
-    // Requires: positive double
     // MODIFIES: this
     // EFFECTS: record the new market price and return profit in $US up to this point
-    public double updateMarketPrice(double marketPrice) {
+    public double updateMarketPrice(double marketPrice) throws NegativeNumber {
+        if (marketPrice < 0) {
+            throw new NegativeNumber();
+        }
         this.marketPrice = marketPrice;
         return calcProfit();
     }
@@ -60,7 +64,15 @@ public class Stock implements Writable {
     // Requires: one positive integer and one positive double, quantity is less that or equal number of owned stocks
     // MODIFIES: this
     // EFFECTS: sell number of given stock and return profit made on the sold stocks in $US
-    public double sell(int quantity, double sellPrice) {
+    //          if quantity or sellPrice is negative throws NegativeNumber exception
+    //          if doesn't have enough shares throws NotSufficientFund exception
+    public double sell(int quantity, double sellPrice) throws NegativeNumber, NotSufficientFund {
+        if (quantity < 0 || sellPrice < 0) {
+            throw new NegativeNumber();
+        }
+        if (quantity > this.quantity) {
+            throw new NotSufficientFund();
+        }
         this.sellPrice = sellPrice;
         this.marketPrice = sellPrice;
         this.quantity -= quantity;
@@ -77,9 +89,13 @@ public class Stock implements Writable {
 //        return this.buyPrice;
 //    }
 
-    // REQUIRES: period is number of quarters of year
+
     // EFFECTS: calculating the profit gained from dividend for a given period of time
-    public double divProfit(int period) {
+    //          or throw NegativeNumber Exception if period is negative
+    public double divProfit(int period) throws NegativeNumber {
+        if (period < 0) {
+            throw new NegativeNumber();
+        }
         return this.quantity * this.marketPrice * this.divYield * period / 400;
     }
 

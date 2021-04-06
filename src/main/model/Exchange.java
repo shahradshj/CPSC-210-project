@@ -2,6 +2,7 @@ package model;
 
 // This class represent a stock exchange.
 
+import exception.DidNotFindStock;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -54,14 +55,14 @@ public class Exchange implements Writable {
     }
 
 
-    // EFFECTS: returns the stock with the given name
-    public Stock searchForName(String name) {
+    // EFFECTS: returns the stock with the given name or throws DidNotFindStock
+    public Stock searchForName(String name) throws DidNotFindStock {
         for (Stock s : this.stocks) {
             if (name.equals(s.getName())) {
                 return s;
             }
         }
-        return null;
+        throw new DidNotFindStock();
     }
 
 //    public String getCountry() {

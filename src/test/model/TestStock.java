@@ -1,5 +1,7 @@
 package model;
 
+import exception.NegativeNumber;
+import exception.NotSufficientFund;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,20 +22,83 @@ class TestStock {
     }
 
     @Test
-    void testUpdateMarketPrice() {
-        aapl.updateMarketPrice(140);
-        assertEquals(140, aapl.getMarketPrice());
-        msft.updateMarketPrice(1000);
-        assertEquals(1000, msft.getMarketPrice());
+    void testUpdateMarketPriceNoException() {
+        try {
+            aapl.updateMarketPrice(140);
+            assertEquals(140, aapl.getMarketPrice());
+            msft.updateMarketPrice(1000);
+            assertEquals(1000, msft.getMarketPrice());
+        } catch (NegativeNumber negativeNumber) {
+            fail("Shouldn't have happened!");
+        }
     }
 
     @Test
-    void testsell() {
-        assertEquals(50, aapl.sell(5, 130));
-        assertEquals(0, aapl.getQuantity());
+    void testUpdateMarketPriceThrowsExceptionNegativeNumber() {
+        try {
+            aapl.updateMarketPrice(-140);
+        } catch (NegativeNumber negativeNumber) {
+            //expected
+        }
+    }
 
-        assertEquals(50, msft.sell(5, 230));
-        assertEquals(5, msft.getQuantity());
+    @Test
+    void testUpdateMarketPriceNoExceptionFor0() {
+        try {
+            aapl.updateMarketPrice(0);
+            assertEquals(0, aapl.getMarketPrice());
+        } catch (NegativeNumber negativeNumber) {
+            fail("Shouldn't have happened!");
+        }
+    }
+
+    @Test
+    void testSellNoException() {
+        try {
+            assertEquals(50, aapl.sell(5, 130));
+            assertEquals(0, aapl.getQuantity());
+
+            assertEquals(50, msft.sell(5, 230));
+            assertEquals(5, msft.getQuantity());
+        } catch (NegativeNumber negativeNumber) {
+            fail("Shouldn't have happened! Negative Number!");
+        } catch (NotSufficientFund notSufficientFund) {
+            fail("Shouldn't have happened! Not sufficient fund!");
+        }
+    }
+
+    @Test
+    void testSellNotSufficientFundException() {
+        try {
+            aapl.sell(6, 130);
+
+        } catch (NegativeNumber negativeNumber) {
+            fail("Shouldn't have happened! Negative Number!");
+        } catch (NotSufficientFund notSufficientFund) {
+            // expected
+        }
+    }
+
+    @Test
+    void testSellNegativeQuantity() {
+        try {
+            assertEquals(50, aapl.sell(-5, 130));
+        } catch (NegativeNumber negativeNumber) {
+            // expected
+        } catch (NotSufficientFund notSufficientFund) {
+            fail("Shouldn't have happened! Not sufficient fund!");
+        }
+    }
+
+    @Test
+    void testSellNegativePrice() {
+        try {
+            assertEquals(50, aapl.sell(5, -130));
+        } catch (NegativeNumber negativeNumber) {
+            // expected
+        } catch (NotSufficientFund notSufficientFund) {
+            fail("Shouldn't have happened! Not sufficient fund!");
+        }
     }
 
     @Test
@@ -68,7 +133,20 @@ class TestStock {
     }
 
     @Test
-    void testDivProfit() {
-        assertEquals(10,googl.divProfit(4));
+    void testDivProfitNoException() {
+        try {
+            assertEquals(10,googl.divProfit(4));
+        } catch (NegativeNumber negativeNumber) {
+            fail("Shouldn't have happened!");
+        }
+    }
+
+    @Test
+    void testDivProfitNegativePeriod() {
+        try {
+            googl.divProfit(-4);
+        } catch (NegativeNumber negativeNumber) {
+            // expected
+        }
     }
 }

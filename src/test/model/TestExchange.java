@@ -1,5 +1,6 @@
 package model;
 
+import exception.DidNotFindStock;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,11 @@ public class TestExchange {
     @Test
     void testAddStockThatDoesNotExist() {
         assertTrue(nyse.addStock(amzn));
-        assertEquals(amzn, nyse.searchForName("Amazon"));
+        try {
+            assertEquals(amzn, nyse.searchForName("Amazon"));
+        } catch (DidNotFindStock didNotFindStock) {
+            fail("Shouldn't have happened");
+        }
     }
 
     @Test
@@ -57,19 +62,29 @@ public class TestExchange {
         nyse.addStock(dis);
         nyse.addStock(amzn);
 
-        assertEquals(googl, nasdaq.searchForName("Alphabet"));
-        assertEquals(dis, nyse.searchForName("Walt Disney Co"));
+        try {
+            assertEquals(googl, nasdaq.searchForName("Alphabet"));
+            assertEquals(dis, nyse.searchForName("Walt Disney Co"));
+        } catch (DidNotFindStock didNotFindStock) {
+            fail("Shouldn't have happened");
+        }
+
     }
 
     @Test
-    void testSearchForNameForNull() {
+    void testSearchForNameThrowsException() {
         nasdaq.addStock(aapl);
-        nasdaq.addStock(msft);
-        nasdaq.addStock(googl);
-        nyse.addStock(dis);
-        nyse.addStock(amzn);
+//        nasdaq.addStock(msft);
+//        nasdaq.addStock(googl);
+//        nyse.addStock(dis);
+//        nyse.addStock(amzn);
 
-        assertEquals(null, nasdaq.searchForName("google"));
+        try {
+            nasdaq.searchForName("google");
+            fail("Shouldn't have happened");
+        } catch (DidNotFindStock didNotFindStock) {
+            // Expected
+        }
     }
 
     @Test
