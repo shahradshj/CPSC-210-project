@@ -34,13 +34,6 @@ exception is not expected."**
 - Class Stock, Method: sell(int quantity, double sellPrice)
 - Class Stock, Method: divProfit(int period)
 
+## Phase 4: Task 3:
 
 
-
-A *bulleted* list:
-- item 1
-- item 2
-- item 3
-
-An example of text with **bold** and *italic* fonts.  Note that the IntelliJ markdown previewer doesn't seem to render 
-the bold and italic fonts correctly but they will appear correctly on GitHub.

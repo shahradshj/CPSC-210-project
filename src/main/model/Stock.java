@@ -45,10 +45,10 @@ public class Stock implements Writable {
         String title = this.name + "(" + this.symbol + ")\n";
         String cost = "\t - Total cost: $US" + this.buyPrice + " * " + this.quantity + " = $US" + totalCost() + "\n";
         String currentPrice = "\t - Market Price: $US" + this.marketPrice + "\n";
-        String cuttentValue = "\t - Today's value: $US" + this.marketPrice * this.quantity + "\n";
+        String currentValue = "\t - Today's value: $US" + this.marketPrice * this.quantity + "\n";
         String profit = "\t - Profit:  $US "  + calcProfit() + " - " + calcProfitPercent() + "%\n";
 
-        return title + cost + currentPrice + cuttentValue + profit;
+        return title + cost + currentPrice + currentValue + profit;
     }
 
     // MODIFIES: this
