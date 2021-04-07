@@ -35,5 +35,11 @@ exception is not expected."**
 - Class Stock, Method: divProfit(int period)
 
 ## Phase 4: Task 3:
-
+- Because of the limitation on the maximum number of lines in one method, I had to break my methods.
+  Therefore, it reduced its readability. However, after I added more functionality to my code,
+  given more time, I would put these breaks at more reasonable locations to group similar functionalities together.
+- I would have liked to move some methods relating to creating a stock, or an exchange by the user their own class. 
+  However, because I needed to gave feedback to the user, I had to keep those in my GUI class. I tried using String
+  for returns, but messages were different which lost its point.
+- Otherwise, I believe I was able to keep my code cohesive.
 
